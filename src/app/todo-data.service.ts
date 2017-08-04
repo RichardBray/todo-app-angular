@@ -3,15 +3,14 @@ import { Todo } from './todo';
 
 @Injectable()
 export class TodoDataService {
+  public lastId: number = 0;
+  public todos: Todo[] = [];
 
-  lastId: number = 0;
-  todos: Todo[] = [];
-
-  constructor() { }
+  constructor() {}
 
   // Simulate POST /todos
-  addTodo(todo: Todo): TodoDataService {
-    if(!todo.id) {
+  public addTodo(todo: Todo): TodoDataService {
+    if (!todo.id) {
       todo.id = ++this.lastId;
     }
     this.todos.push(todo);
@@ -19,21 +18,29 @@ export class TodoDataService {
   }
 
   // Simulate DELETE /todos/:id
-  deleteTodoById(id: number): TodoDataService {
+  public deleteTodoById(id: number): TodoDataService {
     this.todos = this.todos.filter(todo => todo.id !== id);
     return this;
   }
 
-  toggleTodoComplete(todo: Todo) {
-    let updatedTodo = this.updateTodoById(todo.id, {
+  public toggleTodoComplete(todo: Todo) {
+    let updatedTodo = this._updateTodoById(todo.id, {
       complete: !todo.complete
     });
     return updatedTodo;
   }
 
+  public getCompleteTodos(): Todo[] {
+    return this.todos.filter(todo => todo.complete === true);
+  }
+
+  public getIncompleteTodos(): Todo[] {
+    return this.todos.filter(todo => todo.complete === false);
+  }
+
   // Simulate PUT /todos/:id
-  updateTodoById(id: number, values: Object = {}): Todo {
-    let todo = this.getTodoById(id);
+  private _updateTodoById(id: number, values: Object = {}): Todo {
+    let todo = this._getTodoById(id);
     if (!todo) {
       return null;
     }
@@ -41,16 +48,8 @@ export class TodoDataService {
     return todo;
   }
 
-  getCompleteTodos(): Todo[] {
-    return this.todos.filter(todo => todo.complete === true);
-  }
-
-  getIncompleteTodos(): Todo[] {
-    return this.todos.filter(todo => todo.complete === false);
-  }
-
   // Simulate GET /todos/:id
-  getTodoById(id: number): Todo {
+  private _getTodoById(id: number): Todo {
     return this.todos.filter(todo => todo.id === id).pop();
   }
 }

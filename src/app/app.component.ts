@@ -12,27 +12,27 @@ export class AppComponent {
 
   constructor(private todoDataService: TodoDataService) {}
 
-  addTodo(): void {
+  public addTodo(): void {
     this.todoDataService.addTodo(this.newTodo);
     this.newTodo = new Todo();
   }
 
-  toggleTodoComplete(todo): void {
+  public toggleTodoComplete(todo): void {
     this.todoDataService.toggleTodoComplete(todo);
   }
 
-  removeTodo(todo): void {
+  public removeTodo(todo): void {
     this.todoDataService.deleteTodoById(todo.id);
   }
 
-  allTodos(): number {
+  public allTodos(): number {
     return this.incompleteTodos.length + this.completeTodos.length;
   }
-  get incompleteTodos(): Array<Todo> {
+  public get incompleteTodos(): Array<Todo> {
     return this.todoDataService.getIncompleteTodos();
   }
 
-  get completeTodos(): Array<Todo> {
+  public get completeTodos(): Array<Todo> {
     return this.todoDataService.getCompleteTodos();
   }
 }
